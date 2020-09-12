@@ -6,6 +6,14 @@ from settings import Settings
 
 from ship import Ship
 
+from game_functions import check_events
+
+from game_functions import update_screen
+
+from game_functions import update_bullets
+
+from pygame.sprite import Group
+
 
 def run_game():
     # 初始化游戏并创建一个屏幕对象
@@ -22,24 +30,17 @@ def run_game():
     # bg_color = (230, 230, 230)  # RGB编码指定颜色，将背景颜色设置成浅灰色
 
     # 创建一艘飞船
-    ship = Ship(screen)
+    ship = Ship(screen, ai_settings)
+
+    bullets = Group()
 
     # 开始游戏主循环
     while True:
 
-        # 监视鼠标和键盘事件
-        # 如果鼠标点击退出则退出程序
-        for event in pygame.event.get():  # event.get()访问pygame检测到的事件
-            if event.type == pygame.QUIT:
-                sys.exit()
-
-        # 每次循环重绘屏幕
-        screen.fill(ai_settings.bg_color)  # 调用fill方法用背景色填充整个屏幕
-
-        ship.blitme()
-
-        # 让最近绘制的屏幕可见
-        pygame.display.flip()
+        check_events(ai_settings, screen, ship, bullets)
+        ship.update()
+        update_bullets(bullets)
+        update_screen(ai_settings, screen, ship, bullets)
 
 
 run_game()
